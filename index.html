@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bayi Portalı - Ana Sayfa</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0b1f3b;
+      --glass: rgba(255,255,255,.14);
+      --glass2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.18);
+      --text: #eef2ff;
+      --muted: rgba(238,242,255,.78);
+      --brand: #7A0F2E;
+      --brand2: #2563eb;
+      --card: rgba(255,255,255,.92);
+      --cardText: #0b1f3b;
+      --shadow: 0 22px 80px rgba(15, 23, 42, 0.45);
+    }
+
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 600px at 15% 20%, rgba(37,99,235,.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 10%, rgba(122,15,46,.35), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      position: relative;
+      padding: 26px;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Arka plan fotoğrafın kalsın istiyorsan aç:
+       - Dosya adı: arka-plan.jpg (index.html ile aynı klasörde)
+    */
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("arka-plan.jpg") no-repeat center center / cover;
+      opacity: .50;
+      filter: saturate(1.05) contrast(10);
+      z-index:0;
+    }
+
+    /* Hafif karartma */
+    body::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.35));
+      z-index:0;
+    }
+
+    .shell{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      gap: 10px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 240px;
+    }
+
+    .logo{
+      width: 99px;
+      height: 99px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.9), rgba(255,255,255,.15)),
+        linear-gradient(135deg, rgba(37,99,235,.95), rgba(122,15,46,.95));
+      
+      display:grid;
+      place-items:center;
+      color: white;
+      font-weight: 900;
+      letter-spacing: .5px;
+      user-select:none;
+    }
+
+    .brand-text b{
+      display:block;
+      color: var(--text);
+      font-size: 1rem;
+      letter-spacing: .2px;
+    }
+    .brand-text span{
+      display:block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 2px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34,197,94,.18);
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 18px;
+      padding: 18px;
+    }
+
+    @media (max-width: 980px){
+      .content{ grid-template-columns: 1fr; }
+      .brand{ min-width: unset; }
+    }
+
+    .hero{
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(circle at 20% 0%, rgba(211,26,39,.35), transparent 55%);
+      opacity: .9;
+      pointer-events:none;
+    }
+
+    h1{
+      position: relative;
+      color: var(--text);
+      font-size: 2rem;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      margin-bottom: 10px;
+    }
+
+    .sub{
+      position: relative;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+      max-width: 52ch;
+    }
+
+    .hero-actions{
+      position: relative;
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .ghost{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      font-weight: 650;
+      font-size: .9rem;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .ghost:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.28);
+      background: rgba(255,255,255,.12);
+    }
+
+    .cards{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .card-link{
+      text-decoration: none;
+      display:block;
+    }
+
+    .card{
+      background: var(--card);
+      color: var(--cardText);
+      border-radius: 18px;
+      padding: 14px 14px 14px;
+      border: 1px solid rgba(148,163,184,.5);
+      box-shadow: 0 14px 30px rgba(15,23,42,.12);
+      display:flex;
+      gap: 12px;
+      align-items: flex-start;
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: radial-gradient(circle at 110% 0%, rgba(37,99,235,.14), transparent 55%);
+      opacity: .0;
+      transition: opacity .14s ease;
+      pointer-events:none;
+    }
+
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(37,99,235,.65);
+      box-shadow: 0 18px 44px rgba(15,23,42,.18);
+    }
+    .card:hover::before{ opacity: 1; }
+
+    .ico{
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+      color: white;
+      font-weight: 900;
+      flex: 0 0 auto;
+      box-shadow: 0 10px 22px rgba(37,99,235,.18);
+      user-select:none;
+    }
+    .i1{ background: linear-gradient(135deg, #2563eb, #7c3aed); }
+    .i2{ background: linear-gradient(135deg, #7A0F2E, #f97316); }
+    .i3{ background: linear-gradient(135deg, #0B1F3B, #06b6d4); }
+    .i4{ background: linear-gradient(135deg, #16a34a, #2563eb); }
+
+    .card-body{
+      flex: 1;
+      min-width: 0;
+    }
+
+    .card-title{
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: .2px;
+      margin-bottom: 4px;
+      color: #111827;
+    }
+
+    .card-desc{
+      font-size: .88rem;
+      line-height: 1.45;
+      color: rgba(17,24,39,.78);
+    }
+
+    .meta{
+      margin-top: 10px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .pill{
+      font-size: .78rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(37,99,235,.08);
+      color: rgba(37,99,235,.95);
+      font-weight: 700;
+      border: 1px solid rgba(37,99,235,.18);
+      white-space: nowrap;
+    }
+
+    .go{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(17,24,39,.06);
+      border: 1px solid rgba(17,24,39,.08);
+      color: rgba(17,24,39,.86);
+      font-weight: 800;
+      font-size: .84rem;
+      white-space: nowrap;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .card:hover .go{
+      background: rgba(37,99,235,.10);
+      transform: translateY(-1px);
+    }
+
+    footer{
+      padding: 14px 18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(238,242,255,.72);
+      font-size: .82rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-strong{
+      color: rgba(238,242,255,.92);
+      font-weight: 700;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+  <img src="logo.png" alt="Logo">
+</div>
+        <div class="brand-text">
+          <b>Bayi Portalı</b>
+          <span>Eğitim • Standart • Katalog</span>
+        </div>
+      </div>
+
+      <div class="chip">
+        <span class="dot"></span>
+        Ev Ödevi Projesi • Ana Panel
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- SOL: Hero -->
+      <section class="hero">
+        <h1>Bayi Portalı – Ana Sayfa</h1>
+        <p class="sub">
+          Bu platform, bayilerimizin satış süreçlerini kolaylaştırmak,
+güncel eğitimlere erişmesini sağlamak ve sürekli gelişen ürün yelpazemizi tek merkezden takip edebilmesi amacıyla oluşturulmuştur.Yandaki menüden güncel ürün kataloğumuza ve baştan sona tüm etsy satış sürecini bulabileceğiniz etsy eğitimi e-kitabımıza ulaşabilirsiniz.
+Ayrıca hesap makinesi ile halı fiyatı, metrekare ve kargo ücretlerini hızlıca hesaplayarak toplam maliyeti kolayca öğrenebilirsiniz.
+        </p>
+
+        <div class="hero-actions">
+          <!-- Katalog PDF: yeni sekmede aç -->
+          <a class="ghost" href="katalog.pdf" target="_blank" rel="noopener">
+            📄 Kataloğu Aç
+          </a>
+          <!-- İletişim -->
+          <a class="ghost" href="iletisim.html">
+            ☎️ İletişim
+          </a>
+        </div>
+      </section>
+
+      <!-- SAĞ: Kartlar (bilgiler aynı, tasarım farklı) -->
+      <section class="cards">
+        <!-- 1. Ürün Katoloğu (PDF) -->
+        <a class="card-link" href="katalog.pdf" target="_blank" rel="noopener">
+          <div class="card">
+            <div class="ico i1">📘</div>
+            <div class="card-body">
+              <div class="card-title">Ürün Katoloğu</div>
+              <div class="card-desc">PDF katalog tarayıcıda açılır.</div>
+              <div class="meta">
+                <span class="pill">Katalog</span>
+                <span class="go">Aç →</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 2. Eğitim İçerikleri -->
+        <a class="card-link" href="egitim-icerikleri.html">
+          <div class="card">
+            <div class="ico i2">🎓</div>
+            <div class="card-body">
+              <div class="card-title">Eğitim İçerikleri</div>
+              <div class="card-desc">Bayiler için video ve doküman eğitimleri.</div>
+              <div class="meta">
+                <span class="pill">Eğitim</span>
+                <span class="go">Git →</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 3. Kargo ve Ürün Hesaplama -->
+        <a class="card-link" href="kargo.html">
+          <div class="card">
+            <div class="ico i3">🧮</div>
+            <div class="card-body">
+              <div class="card-title">Kargo ve Ürün Hesaplama</div>
+              <div class="card-desc">Metrekare, ağırlık ve kargo maliyeti hesaplama araçları.</div>
+              <div class="meta">
+                <span class="pill">Hesaplama</span>
+                <span class="go">Aç →</span>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- 4. İletişim -->
+        <a class="card-link" href="iletisim.html">
+          <div class="card">
+            <div class="ico i4">📞</div>
+            <div class="card-body">
+              <div class="card-title">İletişim</div>
+              <div class="card-desc">Merkez ofis ve destek hattı iletişim bilgileri.</div>
+              <div class="meta">
+                <span class="pill">Destek</span>
+                <span class="go">Git →</span>
+              </div>
+            </div>
+          </div>
+        </a>
+      </section>
+    </div>
+
+    <footer>
+      <span><span class="footer-strong">Bayi Eğitim & Standart Portalı</span> – Ev Ödevi Projesi</span>
+      <span>Dosyalar: index.html • katalog.pdf • egitim-icerikleri.html • kargo.html • iletisim.html</span>
+    </footer>
+  </div>
+</body>
+</html>

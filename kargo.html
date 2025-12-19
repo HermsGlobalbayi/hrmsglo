@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kargo ve Ürün Hesaplama - Bayi Portalı</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0b1f3b;
+      --glass: rgba(255,255,255,.14);
+      --glass2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.18);
+      --text: #eef2ff;
+      --muted: rgba(238,242,255,.78);
+      --card: rgba(255,255,255,.92);
+      --cardText: #0b1f3b;
+      --shadow: 0 22px 80px rgba(15, 23, 42, 0.45);
+    }
+
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 600px at 15% 20%, rgba(37,99,235,.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 10%, rgba(122,15,46,.35), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      position: relative;
+      padding: 26px;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Arka plan fotoğrafı kullanacaksan dosya adı arka-plan.jpg olmalı */
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("arka-plan.jpg") no-repeat center center / cover;
+      opacity: .28;
+      filter: saturate(1.05) contrast(1.05);
+      z-index:0;
+    }
+    body::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.35));
+      z-index:0;
+    }
+
+    .shell{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+
+    .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.9), rgba(255,255,255,.15)),
+        linear-gradient(135deg, rgba(37,99,235,.95), rgba(122,15,46,.95));
+      box-shadow: 0 14px 30px rgba(37,99,235,.25);
+      display:grid;
+      place-items:center;
+      color: white;
+      font-weight: 900;
+      letter-spacing: .5px;
+      user-select:none;
+    }
+
+    .brand-text b{
+      display:block;
+      color: var(--text);
+      font-size: 1rem;
+      letter-spacing: .2px;
+    }
+    .brand-text span{
+      display:block;
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: 2px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+    .dot{
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34,197,94,.18);
+    }
+
+    .nav{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .ghost{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      font-weight: 650;
+      font-size: .9rem;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .ghost:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.28);
+      background: rgba(255,255,255,.12);
+    }
+
+    .content{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      padding: 18px;
+    }
+    @media (max-width: 980px){
+      .content{ grid-template-columns: 1fr; }
+    }
+
+    .hero{
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(circle at 20% 0%, rgba(37,99,235,.35), transparent 55%);
+      opacity: .9;
+      pointer-events:none;
+    }
+    .hero h1{
+      position: relative;
+      color: var(--text);
+      font-size: 1.55rem;
+      line-height: 1.15;
+      letter-spacing: .2px;
+      margin-bottom: 8px;
+    }
+    .hero p{
+      position: relative;
+      color: var(--muted);
+      font-size: .98rem;
+      line-height: 1.6;
+      max-width: 70ch;
+    }
+
+    .panel{
+      background: var(--card);
+      color: var(--cardText);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid rgba(148,163,184,.55);
+      box-shadow: 0 14px 30px rgba(15,23,42,.12);
+    }
+
+    .panel h2{
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    @media (max-width: 520px){
+      .row{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      display:block;
+      font-size: .86rem;
+      font-weight: 800;
+      color: rgba(17,24,39,.86);
+      margin-bottom: 6px;
+    }
+
+    select, input{
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,.7);
+      background: rgba(255,255,255,.96);
+      outline: none;
+      font-size: .95rem;
+    }
+    select:focus, input:focus{
+      border-color: rgba(37,99,235,.75);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.16);
+    }
+
+    .checkline{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(37,99,235,.07);
+      border: 1px solid rgba(37,99,235,.16);
+      margin-bottom: 10px;
+      user-select:none;
+    }
+    .checkline input{
+      width: 18px;
+      height: 18px;
+      accent-color: #2563eb;
+    }
+    .checkline span{
+      font-size: .92rem;
+      font-weight: 800;
+      color: rgba(29,78,216,.95);
+    }
+
+    .btn{
+      width: 100%;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: white;
+      font-weight: 900;
+      font-size: .98rem;
+      cursor:pointer;
+      transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+      box-shadow: 0 14px 26px rgba(37,99,235,.25);
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 18px 34px rgba(37,99,235,.35);
+    }
+    .btn:active{
+      transform: translateY(0);
+    }
+
+    .result{
+      display:none;
+      margin-top: 12px;
+      border-radius: 16px;
+      background: rgba(17,24,39,.04);
+      border: 1px solid rgba(17,24,39,.08);
+      padding: 12px;
+    }
+    .result .line{
+      font-size: .92rem;
+      color: rgba(17,24,39,.86);
+      line-height: 1.6;
+    }
+    .result hr{
+      border: none;
+      border-top: 1px solid rgba(17,24,39,.12);
+      margin: 10px 0;
+    }
+    .result .total{
+      font-weight: 1000;
+      font-size: 1rem;
+      color: rgba(17,24,39,.92);
+    }
+    .result .warn{
+      font-weight: 950;
+      color: #b91c1c;
+      margin-top: 4px;
+    }
+
+    .side-card{
+      background: rgba(255,255,255,.92);
+      border-radius: 18px;
+      padding: 16px;
+      border: 1px solid rgba(148,163,184,.55);
+      box-shadow: 0 14px 30px rgba(15,23,42,.12);
+    }
+    .side-card h3{
+      font-size: 1.02rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      color: #111827;
+    }
+    .sizes{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      font-size: .92rem;
+      color: rgba(17,24,39,.86);
+    }
+    .sizes div{
+      display:flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(37,99,235,.06);
+      border: 1px solid rgba(37,99,235,.12);
+    }
+
+    footer{
+      padding: 14px 18px 18px;
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(238,242,255,.72);
+      font-size: .82rem;
+      flex-wrap: wrap;
+    }
+    .footer-strong{ color: rgba(238,242,255,.92); font-weight: 800; }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">BP</div>
+        <div class="brand-text">
+          <b>Kargo & Ürün Hesaplama</b>
+          <span>Metrekare • Kargo • Toplam</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="ghost" href="index.html">🏠 Ana Sayfa</a>
+        <span class="chip"><span class="dot"></span> Hesaplama Paneli</span>
+      </div>
+    </div>
+
+    <div class="content">
+      <!-- SOL -->
+      <div>
+        <div class="hero">
+          <h1>Halı fiyatı + kargo ücretini hızlı hesapla</h1>
+          <p>
+            Halı kalitesini seç, en-boy gir. Ölçüye göre m² hesaplanır, ürün fiyatı bulunur,
+            kargo tablosundan ücret eklenir. Amerika siparişi ise toplamın %20’si eklenir.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h2>Hesap Makinesi</h2>
+
+          <div style="margin-bottom:10px;">
+            <label for="haliKalitesi">Halı Kalitesi</label>
+            <select id="haliKalitesi">
+              <option value="ekobambu">Ekobambu (20 $/m²)</option>
+              <option value="puffy">Puffy (30 $/m²)</option>
+              <option value="bukle">Bukle (30 $/m²)</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="enInput">En (cm)</label>
+              <input id="enInput" type="number" placeholder="80">
+            </div>
+            <div>
+              <label for="boyInput">Boy (cm)</label>
+              <input id="boyInput" type="number" placeholder="150">
+            </div>
+          </div>
+
+          <div class="checkline">
+            <input id="amerikaSiparis" type="checkbox">
+            <span>Bu Amerika siparişidir (%20 eklenir)</span>
+          </div>
+
+          <button class="btn" onclick="hesaplaHaliFiyati()">Hesapla</button>
+
+          <div id="sonucKutusu" class="result">
+            <div id="olcuMetni" class="line"></div>
+            <div id="m2Metni" class="line"></div>
+            <div id="haliFiyatiMetni" class="line"></div>
+            <div id="kargoMetni" class="line"></div>
+            <hr>
+            <div id="toplamMetni" class="total"></div>
+            <div id="amerikaMetni" class="warn"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAĞ -->
+      <aside class="side-card">
+        <h3>En Çok Kullanılan Ölçüler</h3>
+        <div class="sizes">
+          <div><span>50 × 70</span> <b>16 $</b></div>
+          <div><span>60 × 90</span> <b>18 $</b></div>
+          <div><span>80 × 100</span> <b>20 $</b></div>
+          <div><span>80 × 120</span> <b>20 $</b></div>
+          <div><span>80 × 150</span> <b>22 $</b></div>
+          <div><span>80 × 200</span> <b>28 $</b></div>
+          <div><span>100 × 150</span> <b>28 $</b></div>
+          <div><span>100 × 200</span> <b>30 $</b></div>
+          <div><span>100 × 300</span> <b>40 $</b></div>
+          <div><span>120 × 180</span> <b>30 $</b></div>
+          <div><span>140 × 200</span> <b>40 $</b></div>
+          <div><span>160 × 230</span> <b>40 $</b></div>
+          <div><span>180 × 280</span> <b>48 $</b></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <span><span class="footer-strong">Bayi Portalı</span> – Kargo ve Ürün Hesaplama</span>
+      <span>Dosya: kargo.html</span>
+    </footer>
+  </div>
+
+  <script>
+    function hesaplaHaliFiyati() {
+      var en = parseFloat(document.getElementById("enInput").value);
+      var boy = parseFloat(document.getElementById("boyInput").value);
+      var kalite = document.getElementById("haliKalitesi").value;
+      var amerika = document.getElementById("amerikaSiparis").checked;
+
+      if (!en || !boy) {
+        alert("Geçerli ölçü girin.");
+        return;
+      }
+
+      var m2 = (en / 100) * (boy / 100);
+
+      var fiyat = (kalite === "ekobambu") ? 20 : 30;
+      var haliFiyati = m2 * fiyat;
+
+      var kargo = {
+        "50x70":16,"60x90":18,"80x100":20,"80x120":20,"80x150":22,"80x200":28,
+        "100x150":28,"100x200":30,"100x300":40,"120x180":30,"140x200":40,
+        "160x230":40,"180x280":48
+      };
+
+      var key = [Math.min(en,boy), Math.max(en,boy)].join("x");
+      var kargoUcret = kargo[key] || 0;
+
+      var toplam = haliFiyati + kargoUcret;
+
+      var ekstra = amerika ? toplam * 0.20 : 0;
+      toplam += ekstra;
+
+      document.getElementById("sonucKutusu").style.display = "block";
+      document.getElementById("olcuMetni").textContent = "Ölçü: " + en + "×" + boy;
+      document.getElementById("m2Metni").textContent = "Alan: " + m2.toFixed(2) + " m²";
+      document.getElementById("haliFiyatiMetni").textContent = "Halı Fiyatı: " + haliFiyati.toFixed(2) + " $";
+      document.getElementById("kargoMetni").textContent = "Kargo: " + kargoUcret + " $";
+      document.getElementById("toplamMetni").textContent = "Toplam: " + toplam.toFixed(2) + " $";
+
+      document.getElementById("amerikaMetni").textContent =
+        amerika ? "(%20 Amerika vergisi: +" + ekstra.toFixed(2) + " $)" : "";
+    }
+  </script>
+</body>
+</html>
