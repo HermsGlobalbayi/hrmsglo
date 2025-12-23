@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>İletişim - Bayi Portalı</title>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root{
+      --bg1:#0b1220;
+      --bg2:#0b1f3b;
+      --glass: rgba(255,255,255,.14);
+      --glass2: rgba(255,255,255,.10);
+      --stroke: rgba(255,255,255,.18);
+      --text: #eef2ff;
+      --muted: rgba(238,242,255,.78);
+      --card: rgba(255,255,255,.92);
+      --cardText: #0b1f3b;
+      --shadow: 0 22px 80px rgba(15, 23, 42, 0.45);
+    }
+
+    body{
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height: 100vh;
+      background:
+        radial-gradient(1000px 600px at 15% 20%, rgba(37,99,235,.35), transparent 60%),
+        radial-gradient(900px 600px at 85% 10%, rgba(122,15,46,.35), transparent 55%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      position: relative;
+      padding: 26px;
+      display: grid;
+      place-items: center;
+      overflow-x: hidden;
+    }
+
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: url("arka-plan.jpg") no-repeat center center / cover;
+      opacity: .28;
+      z-index:0;
+    }
+    body::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: linear-gradient(180deg, rgba(2,6,23,.55), rgba(2,6,23,.35));
+      z-index:0;
+    }
+
+    .shell{
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1000px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border: 1px solid var(--stroke);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      padding: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+
+    .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,.12);
+      display:grid;
+      place-items:center;
+    }
+
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit: contain;
+    }
+
+    .brand-text b{
+      display:block;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .brand-text span{
+      display:block;
+      color: var(--muted);
+      font-size: .82rem;
+    }
+
+    .ghost{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      font-weight: 650;
+      font-size: .9rem;
+    }
+
+    .content{
+      padding: 22px;
+    }
+
+    .hero{
+      padding: 22px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      margin-bottom: 18px;
+    }
+
+    .hero h1{
+      color: var(--text);
+      font-size: 1.7rem;
+      margin-bottom: 6px;
+    }
+    .hero p{
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.6;
+    }
+
+    .card{
+      background: var(--card);
+      color: var(--cardText);
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid rgba(148,163,184,.55);
+      box-shadow: 0 14px 30px rgba(15,23,42,.12);
+    }
+
+    .info{
+      display:flex;
+      flex-direction: column;
+      gap: 14px;
+      font-size: .95rem;
+    }
+
+    .info div{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .info span{
+      font-weight: 800;
+    }
+
+    footer{
+      padding: 14px 18px;
+      border-top: 1px solid rgba(255,255,255,.12);
+      color: rgba(238,242,255,.72);
+      font-size: .82rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">
+          <img src="logo.png" alt="Logo">
+        </div>
+        <div class="brand-text">
+          <b>Bayi Portalı</b>
+          <span>İletişim</span>
+        </div>
+      </div>
+
+      <a class="ghost" href="index.html">🏠 Ana Sayfa</a>
+    </div>
+
+    <div class="content">
+      <div class="hero">
+        <h1>İletişim Bilgileri</h1>
+        <p>
+          Bayi başvuruları, sipariş süreçleri ve teknik destek için aşağıdaki
+          iletişim kanallarından bizimle iletişime geçebilirsiniz.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="info">
+          <div>
+            📧 <span>E-posta:</span>
+            <a href="mailto:siparisbayi@yandex.com">siparisbayi@yandex.com</a>
+          </div>
+          <div>
+            📞 <span>Telefon:</span>
+            <a href="tel:+905530677483">0553 0677 44 83</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Bayi Eğitim & Standart Portalı – İletişim Sayfası
+    </footer>
+  </div>
+</body>
+</html>
